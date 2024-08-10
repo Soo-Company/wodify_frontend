@@ -12,15 +12,11 @@
         </div>
 
         <v-btn @click="addWodDet" color="secondary">Add WodDet</v-btn>
-
         <v-btn @click="submitForm" color="primary">Submit</v-btn>
-
     </v-container>
 </template>
 
 <script>
-// import axios from 'axios';
-
 export default {
     data() {
         return {
