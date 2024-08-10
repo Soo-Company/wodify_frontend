@@ -4,7 +4,7 @@ import { memberRouter } from './MemberRouter';
 import HomeView from '@/views/common/HomeView.vue';
 import {reservationRouter} from './reservationRouter';
 import { wodRouter } from './wodRouter';
-import { postRouter } from './poardRouter';
+import { postRouter } from './postRouter';
 
 const routes = [
     {
