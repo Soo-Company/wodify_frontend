@@ -1,22 +1,26 @@
 <template>
   <v-container>
+    <!-- 상단 글쓰기 버튼 -->
     <v-row justify="end" class="mb-4">
       <v-btn color="primary" @click="goToCreatePost">글쓰기</v-btn>
     </v-row>
 
-    <v-simple-table style="width: 100%;">
+    <!-- 테이블 -->
+    <v-simple-table style="width: 100%; table-layout: fixed;">
       <thead>
         <tr>
-          <th style="border: 1px solid; width: 16%;">ID</th>
-          <th style="border: 1px solid; width: 28%;">Title</th>
-          <th style="border: 1px solid; width: 16%;">Name</th>
-          <th style="border: 1px solid; width: 16%;">Like Count</th>
-          <th style="border: 1px solid; width: 16%;">Created Time</th>
-          <th style="border: 1px solid; width: 16%;">Comment Count</th>
+          <th style="border: 1px solid; width: 5%;">No</th>
+          <th style="border: 1px solid; width: auto;">제목</th>
+          <th style="border: 1px solid; width: 10%;">글쓴이</th>
+          <th style="border: 1px solid; width: 5%;">추천</th>
+          <th style="border: 1px solid; width: 20%;">등록일</th>
+          <th style="border: 1px solid; width: 5%;">댓글</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(notice, index) in notices" :key="`notice-${index}`">
+        <!-- 공지사항 -->
+        <tr v-for="(notice, index) in notices" :key="`notice-${index}`" @click="goToDetail(notice.id)"
+          style="cursor: pointer;">
           <td style="border: 1px solid;">공지</td>
           <td style="border: 1px solid;">{{ notice.title }}</td>
           <td style="border: 1px solid;">{{ notice.name }}</td>
@@ -24,7 +28,8 @@
           <td style="border: 1px solid;">{{ notice.createdTime }}</td>
           <td style="border: 1px solid;">{{ notice.commentCount }}</td>
         </tr>
-        <tr v-for="(post, index) in posts" :key="`post-${index}`">
+        <!-- POST 타입 글 -->
+        <tr v-for="(post, index) in posts" :key="`post-${index}`" @click="goToDetail(post.id)" style="cursor: pointer;">
           <td style="border: 1px solid;">{{ post.id }}</td>
           <td style="border: 1px solid;">{{ post.title }}</td>
           <td style="border: 1px solid;">{{ post.name }}</td>
@@ -35,17 +40,14 @@
       </tbody>
     </v-simple-table>
 
+    <!-- 하단 글쓰기 버튼 -->
     <v-row justify="end" class="mt-4">
       <v-btn color="primary" @click="goToCreatePost">글쓰기</v-btn>
     </v-row>
 
-    <v-pagination
-      v-model="currentPage"
-      :length="totalPages"
-      :total-visible="5"
-      class="mt-4"
-      @input="fetchPosts"
-    ></v-pagination>
+    <!-- 페이지네이션 -->
+    <v-pagination v-model="currentPage" :length="totalPages" :total-visible="5" class="mt-4"
+      @input="fetchPosts"></v-pagination>
   </v-container>
 </template>
 
@@ -98,6 +100,9 @@ export default {
     },
     goToCreatePost() {
       this.$router.push('/post/create');
+    },
+    goToDetail(id) {
+      this.$router.push(`/post/detail/${id}`);
     },
   },
 };
