@@ -1,5 +1,5 @@
 <template>
-    <v-container>
+    <v-container v-if="wod">
         <v-card :style="{ width: 'fit-content' }">
             <v-card-title>WOD</v-card-title>
             <v-card-text>
@@ -19,46 +19,35 @@
             </v-card-text>
         </v-card>
     </v-container>
+    <v-container v-else>
+        <v-progress-circular indeterminate color="primary"></v-progress-circular>
+        <p>Loading WOD data...</p>
+    </v-container>
 </template>
 
-
 <script>
+import axios from 'axios';
+
 export default {
+    props: ['date'],  // date 파라미터를 props로 받음
     data() {
         return {
-            wod: {
-                id: 6,
-                boxName: "홍길동의 크로스핏",
-                memberName: "권채훈",
-                date: "2024-08-12",
-                timeCap: "12:34:56",
-                rounds: 5,
-                info: "AMRAP in 12minutes",
-                createdTime: "2024-08-10T13:49:31",
-                wodDetResDtoList: [
-                    {
-                        id: 21,
-                        name: "One arm DB Over Head Lunge",
-                        contents: "6/6",
-                    },
-                    {
-                        id: 22,
-                        name: "Toes to bar",
-                        contents: "12",
-                    },
-                    {
-                        id: 23,
-                        name: "DB snatch",
-                        contents: "12",
-                    },
-                    {
-                        id: 24,
-                        name: "DB hop",
-                        contents: "12",
-                    }
-                ]
-            }
+            wod: null,  // 초기값을 null로 설정, 로딩 후 데이터를 채웁니다.
         };
+    },
+    mounted() {
+        this.fetchWodData();
+    },
+    methods: {
+        async fetchWodData() {
+            try {
+                const response = await axios.get(`http://localhost:8090/wod/find/${this.date}`);
+                this.wod = response.data.result;
+            } catch (error) {
+                console.error('Error fetching WOD data:', error);
+                alert('WOD 데이터를 불러오는 중 오류가 발생했습니다.');
+            }
+        },
     },
 };
 </script>
