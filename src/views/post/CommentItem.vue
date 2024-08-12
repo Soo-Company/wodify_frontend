@@ -118,9 +118,6 @@ export default {
           this.commentCopy.replies.push(response.data.result); // 새 답글을 댓글 목록에 추가
           this.isReplying = false;
           this.replyComment = '';
-
-          // 이벤트를 발생시켜 부모 컴포넌트에 알림
-          this.$emit('reply-added', response.data.result);
         } else {
           alert("답글 등록에 실패했습니다.");
         }
@@ -149,7 +146,10 @@ export default {
       this.commentCopy.replies = this.commentCopy.replies.filter(reply => reply.id !== replyId);
     },
     onReplyAdded(newReply) {
-      this.commentCopy.replies.push(newReply);
+      // 이미 추가된 댓글을 다시 추가하지 않도록 수정
+      if (!this.commentCopy.replies.find(reply => reply.id === newReply.id)) {
+        this.commentCopy.replies.push(newReply);
+      }
     }
   }
 }
