@@ -43,7 +43,6 @@
                 :comment="comment" 
                 :postId="post.id"
                 @comment-deleted="removeComment" 
-                @reply-added="onReplyAdded" 
                 ></comment-item>
             </v-list>
         </div>
@@ -74,6 +73,39 @@ export default {
                 console.error('Error fetching post detail:', error);
             }
         },
+      goBackToList() {
+            this.$router.push('/post/list');
+        },
+        goToEditPost() {
+            this.$router.push(`/post/update/${this.id}`);
+        },
+        async deletePost() {
+            try {
+                const response = await axios.patch(`http://localhost:8090/post/delete/${this.id}`);
+                if (response.status === 200) {
+                    alert('게시물이 삭제되었습니다.');
+                    this.goBackToList(); // 삭제 후 목록으로 돌아가기
+                } else {
+                    alert('게시물 삭제에 실패했습니다.');
+                }
+            } catch (error) {
+                console.error('Error deleting post:', error);
+                alert('게시물 삭제 중 오류가 발생했습니다.');
+            }
+        },
+        async likePost() {
+            try {
+                const response = await axios.post(`http://localhost:8090/post/like/${this.id}`);
+                if (response.status === 200) {
+                    this.post.likeCount = response.data.result; // 서버에서 반환된 새로운 좋아요 수로 업데이트
+                } else {
+                    alert("좋아요에 실패했습니다.");
+                }
+            } catch (error) {
+                console.error('Error liking post:', error);
+                alert("좋아요 중 오류가 발생했습니다.");
+            }
+        },
         async submitComment() {
             if (!this.newComment.trim()) {
                 alert("댓글을 입력하세요.");
@@ -97,47 +129,8 @@ export default {
                 alert("댓글 등록 중 오류가 발생했습니다.");
             }
         },
-        async likePost() {
-            try {
-                const response = await axios.post(`http://localhost:8090/post/like/${this.id}`);
-                if (response.status === 200) {
-                    this.post.likeCount = response.data.result; // 서버에서 반환된 새로운 좋아요 수로 업데이트
-                } else {
-                    alert("좋아요에 실패했습니다.");
-                }
-            } catch (error) {
-                console.error('Error liking post:', error);
-                alert("좋아요 중 오류가 발생했습니다.");
-            }
-        },
         removeComment(commentId) {
             this.post.comments = this.post.comments.filter(comment => comment.id !== commentId);
-        },
-        onReplyAdded(newReply) {
-            const parentComment = this.post.comments.find(comment => comment.id === newReply.parentId);
-            if (parentComment) {
-                parentComment.replies.push(newReply);
-            }
-        },
-        goBackToList() {
-            this.$router.push('/post/list');
-        },
-        goToEditPost() {
-            this.$router.push(`/post/update/${this.id}`);
-        },
-        async deletePost() {
-            try {
-                const response = await axios.patch(`http://localhost:8090/post/delete/${this.id}`);
-                if (response.status === 200) {
-                    alert('게시물이 삭제되었습니다.');
-                    this.goBackToList(); // 삭제 후 목록으로 돌아가기
-                } else {
-                    alert('게시물 삭제에 실패했습니다.');
-                }
-            } catch (error) {
-                console.error('Error deleting post:', error);
-                alert('게시물 삭제 중 오류가 발생했습니다.');
-            }
         },
     },
     components: {
