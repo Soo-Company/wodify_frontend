@@ -17,6 +17,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
     data() {
         return {
@@ -32,11 +34,22 @@ export default {
     },
     methods: {
         addWodDet() {
-            this.count ++;
+            this.count++;
             this.wodSaveReqDto.wodDetSaveReqDtoList.push({ name: `종목명${this.count}`, contents: `종목내용${this.count}` });
         },
-        submitForm() {
-            console.log('Form submitted successfully:', this.wodSaveReqDto);
+        async submitForm() {
+            try {
+                const response = await axios.post('http://localhost:8090/wod/save', this.wodSaveReqDto);
+                if (response.status === 201) {
+                    alert('WOD가 성공적으로 등록되었습니다.');
+                    window.location.href = `/wod/find/${this.wodSaveReqDto.date}`;  // 성공적으로 등록되면 해당 날짜의 WOD 페이지로 리디렉션
+                } else {
+                    alert('WOD 등록에 실패했습니다.');
+                }
+            } catch (error) {
+                console.error('Error submitting WOD form:', error.response ? error.response.data : error.message);
+                alert('WOD 등록 중 오류가 발생했습니다.');
+            }
         }
     }
 };
