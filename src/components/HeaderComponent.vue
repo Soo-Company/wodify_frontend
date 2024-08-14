@@ -22,7 +22,7 @@
                 </v-list-item>
             </v-list>
         </v-menu>
-        <v-menu v-if="userRole === 'coach'" open-on-hover>
+        <v-menu v-if="userRole === 'COACH'" open-on-hover>
             <template v-slot:activator="{ props }">
             <v-btn color="white" v-bind="props" class="rubikMonoOne">WOD-코치</v-btn>
             </template>
