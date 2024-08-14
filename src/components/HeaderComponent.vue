@@ -22,15 +22,15 @@
                 </v-list-item>
             </v-list>
         </v-menu>
-        <v-menu open-on-hover>
+        <v-menu v-if="userRole === 'coach'" open-on-hover>
             <template v-slot:activator="{ props }">
-            <v-btn color="white" v-bind="props">WOD-코치</v-btn>
+                <v-btn color="white" v-bind="props">WOD-코치</v-btn>
             </template>
             <v-list>
-                <v-list-item :to="{path:'/'}">
-                    <v-list-item-title>와드생성-코치</v-list-item-title>
-                </v-list-item>
-                <v-list-item :to="{path:'/'}">
+                <!-- <v-list-item :to="{ path: '/wod/save' }"> -->
+                    <!-- <v-list-item-title>와드생성-코치</v-list-item-title> -->
+                <!-- </v-list-item> -->
+                <v-list-item :to="{ path: '/wod/find' }">
                     <v-list-item-title>와드조회-코치</v-list-item-title>
                 </v-list-item>
             </v-list>
@@ -59,12 +59,12 @@
             <v-btn color="white" v-bind="props">COMMUNITY-공통</v-btn>
             </template>
             <v-list>
-                <v-list-item :to="{path:'/'}">
+                <v-list-item :to="{path:'/post/list'}">
                     <v-list-item-title>게시판-공통</v-list-item-title>
                 </v-list-item>
-                <v-list-item :to="{path:'/'}">
-                    <v-list-item-title>공지사항-공통</v-list-item-title>
-                </v-list-item>
+                <!-- <v-list-item :to="{path:'/'}"> -->
+                    <!-- <v-list-item-title>공지사항-공통</v-list-item-title> -->
+                <!-- </v-list-item> -->
             </v-list>
         </v-menu>
         <v-menu open-on-hover>
